@@ -1,15 +1,12 @@
-<<<<<<< HEAD
-﻿using UnityEngine;
-=======
-﻿/*using UnityEngine;
->>>>>>> mathew_cha
+using UnityEngine;
 using System.Collections;
 
 public class GameEngine : MonoBehaviour {
 
 	[SerializeField] private GameObject player;
+	[SerializeField] private GameObject cameraLeft;
+	[SerializeField] private GameObject cameraRight;
 
-<<<<<<< HEAD
 	enum World {MARS, EARTH, ISS};
 	[SerializeField] private World currentLocation = World.MARS;
 	private bool changedWorldThisFrame = true;
@@ -24,22 +21,11 @@ public class GameEngine : MonoBehaviour {
 
 	private float lastSwitched;
 	[SerializeField] private float TIMEPERWORLD = 10;
-=======
-	enum World {EARTH, MARS, ISS};
-	[SerializeField] private World currentLocation = World.MARS;
-	private bool changedWorldThisFrame = true;
-
-	private WorldState[] worldStates = WorldState[3];
-
-	private float lastSwitched;
-	[SerializeField] private float TIMEPERWORLD = 30;
->>>>>>> mathew_cha
 	private readonly float WORLDCHANGEHINTTIME = 5;
 
 	// Use this for initialization
 	void Start () {
 		lastSwitched = Time.time;
-<<<<<<< HEAD
 		worldStates[(int) World.MARS] = new WorldState();
 		worldStates[(int) World.EARTH] = new WorldState();
 		worldStates[(int) World.ISS] = new WorldState();
@@ -51,31 +37,14 @@ public class GameEngine : MonoBehaviour {
 		worldStates[(int) World.ISS].skybox = skyboxISS;
 		worldStates[(int) World.MARS].spawnPoint = new Vector3(0, 6.34f, 0);
 		worldStates[(int) World.EARTH].spawnPoint = new Vector3(100, 0, 0);
-		worldStates[(int) World.ISS].spawnPoint = new Vector3(-100, 0, 0);
+		worldStates[(int) World.ISS].spawnPoint = new Vector3(10.35f, -35.91f, -3570);
 		worldStates[(int) World.MARS].spawnRotation = new Vector3(0, 0, 0);
 		worldStates[(int) World.EARTH].spawnRotation = new Vector3(0, 0, 0);
-		worldStates[(int) World.ISS].spawnRotation = new Vector3(0, 0, 0);
-=======
->>>>>>> mathew_cha
+		worldStates[(int) World.ISS].spawnRotation = new Vector3(0, 90, 0);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-<<<<<<< HEAD
-=======
-		if (changedWorldThisFrame) {
-			if (worldStates[currentLocation].firstVisit) {
-				// World Setup
-
-				worldStates[currentLocation].firstVisit = false;
-			} else {
-				// Restart all AI etc for the world
-			}
-
-			changedWorldThisFrame = false;
-		}
-
->>>>>>> mathew_cha
 		switch (currentLocation) {
 			case World.MARS :
 
@@ -88,7 +57,6 @@ public class GameEngine : MonoBehaviour {
 				break;
 		}
 
-<<<<<<< HEAD
 		if (Time.time - lastSwitched > TIMEPERWORLD - WORLDCHANGEHINTTIME) {
 			// Play world switch warning
 		}
@@ -113,15 +81,15 @@ public class GameEngine : MonoBehaviour {
 			player.transform.position = worldStates[(int) currentLocation].playerPosition;
 			player.rigidbody.velocity = worldStates[(int) currentLocation].playerVeclocity;
 			player.transform.rotation = worldStates[(int) currentLocation].playerRotation;
-			player.transform.Find("Main Camera/Main Camera Left").GetComponent<Skybox>().material = worldStates[(int) currentLocation].skybox;
-			player.transform.Find("Main Camera/Main Camera Right").GetComponent<Skybox>().material = worldStates[(int) currentLocation].skybox;
+			cameraLeft.GetComponent<Skybox>().material = worldStates[(int) currentLocation].skybox;
+			cameraRight.GetComponent<Skybox>().material = worldStates[(int) currentLocation].skybox;
 			player.GetComponent<VRplayerController>().health = worldStates[(int) currentLocation].playerHealth;
 
 
 			if (worldStates[(int) currentLocation].firstVisit) {
 				// World Setup
-				player.transform.position = worldStates[(int) currentLocation].playerPosition;
-				player.transform.rotation = worldStates[(int) currentLocation].playerRotation;
+				player.transform.position = worldStates[(int) currentLocation].spawnPoint;
+				player.transform.rotation = Quaternion.Euler(worldStates[(int) currentLocation].spawnRotation.x, worldStates[(int) currentLocation].spawnRotation.y, worldStates[(int) currentLocation].spawnRotation.z);
 				worldStates[(int) currentLocation].firstVisit = false;
 			} else {
 				// Restart all AI etc for the world
@@ -129,16 +97,3 @@ public class GameEngine : MonoBehaviour {
 		}
 	}
 }
-=======
-		if (Time.time - lastSwitched > TIMEPERWORLD - WORLDCHANGEHINTTIME)
-		if (Time.time - lastSwitched > TIMEPERWORLD) {
-			lastSwitched = Time.time;
-			changedWorldThisFrame = true;
-			worldStates[currentLocation].playerTransform = player.transform;
-			worldStates[currentLocation].playerHealth = player.GetComponent<VRplayerController>().health;
-			currentLocation = currentLocation.next;
-		}
-	}
-}
-*/
->>>>>>> mathew_cha

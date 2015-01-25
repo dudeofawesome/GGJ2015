@@ -30,12 +30,16 @@ public class VRplayerController : MonoBehaviour {
 		tmpV3.Set (Mathf.Cos (angle - angle2), 0, Mathf.Sin (angle - angle2));
 		tmpV3 *= mag;
 		rigidbody.AddRelativeForce(tmpV3 * 10000, ForceMode.Force);
-<<<<<<< HEAD
 		rigidbody.velocity = (rigidbody.velocity.magnitude > MAXSPEED) ? rigidbody.velocity.normalized * MAXSPEED : rigidbody.velocity;
-=======
-		rigidbody.velocity = (rigidbody.velocity.magnitude > 2) ? rigidbody.velocity.normalized * 2 : rigidbody.velocity;
->>>>>>> mathew_cha
+		// Move hands for fine tuning aim
 		hands.transform.localRotation = Quaternion.Euler(-Input.GetAxis("AimUpDown") * 15, Input.GetAxis("AimSide") * 15 + 180, 0);
+		// Jump
+		if (Input.GetButtonDown("Jump")) {
+			rigidbody.AddRelativeForce(0, 100000, 0);
+		}
+		if (Input.GetAxis("FireLaser")) {
+			Shoot();
+		}
 	}
 
 	void Shoot () {

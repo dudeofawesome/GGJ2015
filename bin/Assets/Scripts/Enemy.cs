@@ -19,17 +19,10 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public void Update () {
-<<<<<<< HEAD
 		if (!GameEngine.marsPaused) {
 			if (smart) move ();
 			else move2 ();
 		}
-=======
-		if (smart)
-			move ();
-		else
-			move2 ();
->>>>>>> mathew_cha
 	}
 
 
