@@ -15,7 +15,7 @@ public class GameEngine : MonoBehaviour {
 	[SerializeField] private Material skyboxMars;
 	[SerializeField] private Material skyboxISS;
 	[SerializeField] private Material skyboxEarth;
-	public static bool marsPaused = true;
+	public static bool marsPaused = false;
 	public static bool earthPaused = true;
 	public static bool ISSpaused = true;
 
@@ -25,6 +25,9 @@ public class GameEngine : MonoBehaviour {
 
 	[SerializeField] private GameObject marsRover;
 	[SerializeField] private SphereCollider marsRoverAlienSpawn;
+	private int MARS_ROVER_INTERACTION_BOUND = 4;
+	[SerializeField] private GameObject flyingAlien;
+	[SerializeField] private GameObject dumbAlien;
 
 	// Use this for initialization
 	void Start () {
@@ -34,7 +37,7 @@ public class GameEngine : MonoBehaviour {
 		worldStates[(int) World.ISS] = new WorldState();
 		worldStates[(int) World.MARS].gravity = 3.711f;
 		worldStates[(int) World.EARTH].gravity = 9.81f;
-		worldStates[(int) World.ISS].gravity = 0;
+		worldStates[(int) World.ISS].gravity = 9.81f;
 		worldStates[(int) World.MARS].skybox = skyboxMars;
 		worldStates[(int) World.EARTH].skybox = skyboxEarth;
 		worldStates[(int) World.ISS].skybox = skyboxISS;
@@ -50,11 +53,41 @@ public class GameEngine : MonoBehaviour {
 	void Update () {
 		switch (currentLocation) {
 			case World.MARS :
-				Collider[] hitColliders = Physics.OverlapSphere(marsRoverAlienSpawn.center, marsRoverAlienSpawn.radius);
-				int i = 0;
-				while (i < hitColliders.Length) {
-					hitColliders[i].SendMessage("AddDamage");
-					i++;
+				if ((marsRover.transform.position - player.transform.position).magnitude < MARS_ROVER_INTERACTION_BOUND) {
+					marsRover.gameObject.GetComponent<Rover>().turnOn();
+					// Spawn me ma aliens
+					if (Random.Range(0, 100) == 0) {
+						Vector3 spawnPoint;
+						switch (Random.Range(0, 2)) {
+							case 0:
+								spawnPoint = new Vector3(-6.08f, 5.54f, 79.36f);
+								break;
+							case 1:
+								spawnPoint = new Vector3(-60.01f, 9.87f, -130.71f);
+								break;
+							default:
+								spawnPoint = new Vector3(-60.01f, 9.87f, -130.71f);
+								break;
+						}
+						GameObject enemy = (GameObject) Instantiate(flyingAlien, spawnPoint, Quaternion.Euler(0, 0, 0));
+						enemy.GetComponent<Enemy>().player = player;
+					}
+					if (Random.Range(0, 100) == 0) {
+						Vector3 spawnPoint;
+						switch (Random.Range(0, 2)) {
+							case 0:
+								spawnPoint = new Vector3(-6.08f, 5.54f, 79.36f);
+								break;
+							case 1:
+								spawnPoint = new Vector3(-60.01f, 9.87f, -130.71f);
+								break;
+							default:
+								spawnPoint = new Vector3(-60.01f, 9.87f, -130.71f);
+								break;
+						}
+						GameObject enemy = (GameObject) Instantiate(dumbAlien, spawnPoint, Quaternion.Euler(0, 0, 0));
+						enemy.GetComponent<Enemy>().player = player;
+					}
 				}
 				break;
 			case World.EARTH :
@@ -78,12 +111,21 @@ public class GameEngine : MonoBehaviour {
 			switch (currentLocation) {
 				case World.MARS :
 					currentLocation = World.EARTH;
+					marsPaused = true;
+					earthPaused = false;
+					ISSpaused = true;
 					break;
 				case World.EARTH :
 					currentLocation = World.ISS;
+					marsPaused = true;
+					earthPaused = true;
+					ISSpaused = false;
 					break;
 				case World.ISS :
 					currentLocation = World.MARS;
+					marsPaused = false;
+					earthPaused = true;
+					ISSpaused = true;
 					break;
 			}
 			player.transform.position = worldStates[(int) currentLocation].playerPosition;

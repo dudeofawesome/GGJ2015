@@ -2,8 +2,12 @@ using UnityEngine;
 using System.Collections;
 
 public class Enemy : MonoBehaviour {
-	[SerializeField] private GameObject player;
+	[SerializeField] public GameObject player;
 	[SerializeField] private bool smart;
+	[SerializeField] private AudioSource soundHit;
+	[SerializeField] private AudioSource soundDie;
+	[SerializeField] private AudioSource soundTalk;
+	[SerializeField] private GameObject laserEmitter;
 
 	private static int ENEMY_DISTANCE_RANGE = 30,
 					   ENEMY_BUFFER = 10; // How far/close the enemies are allowed to get
@@ -27,10 +31,10 @@ public class Enemy : MonoBehaviour {
 
 
 	public void bulletHit ( int dmgTaken, int pushbackFactor, bool knockBack = false ) {
-		
 		health -= dmgTaken;
 		//AudioSource.PlayClipAtPoint
-
+		soundHit.pitch = Random.value * 0.5f + 0.75f;
+		soundHit.Play();
 		if ( health <= 0 ) {
 			die();
 			return;
@@ -44,11 +48,20 @@ public class Enemy : MonoBehaviour {
 	}
 
 	private void die () {
-
+		soundDie.pitch = Random.value * 2 + 0.5f;
+		AudioSource.PlayClipAtPoint(soundDie.clip, transform.position);
+		// soundDie.Play();
+		Destroy(gameObject);
 	}
 
 	// Smart move code, circling the enemy
 	public void move () {
+		if (Random.Range(0, 200) == 0) {
+			soundTalk.pitch = Random.value * 2 + 0.5f;
+			soundTalk.Play();
+			fireBullet();
+		}
+
 		Vector3 distanceFromEnemy = player.transform.position - transform.position;
 		// If not in ideal range, beeline, if so, circle
 		if ( distanceFromEnemy.magnitude > idealDistanceFromPlayer && distanceFromEnemy.magnitude > idealDistanceFromPlayer - 0.5f ) {
@@ -70,14 +83,21 @@ public class Enemy : MonoBehaviour {
 
 	public void fireBullet () {
 		RaycastHit hitInfo = new RaycastHit ();
-		Vector3 variation = new Vector3 (Random.Range (0.8f, 2f), Random.Range (0.8f, 2f), Random.Range (0.8f, 2f));
-		if (Physics.Raycast(transform.position, 
-		                    new Vector3(transform.forward.x * variation.x, transform.forward.y * variation.y, transform.forward.z * variation.z),
-		    				out hitInfo, 200f)) {
-			if (hitInfo.rigidbody.gameObject.tag == "player") {
-				double angle = Mathf.Atan2( (transform.position - hitInfo.rigidbody.transform.position).z, (transform.position - hitInfo.rigidbody.transform.position).x);
-				hitInfo.rigidbody.gameObject.GetComponent<VRplayerController>().Hurt( 20, angle); 
+		Vector3 variation = new Vector3(1,1,1);//new Vector3 (Random.Range (0.8f, 1.2f), Random.Range (0.8f, 1.2f), Random.Range (0.8f, 1.2f));
+		if (Physics.Raycast(laserEmitter.transform.position, laserEmitter.transform.forward * 200, out hitInfo, 200f)) {
+			if (hitInfo.transform.gameObject.tag == "player") {
+				print("ouchhhhh");
+				float angle = (float) Mathf.Atan2( (transform.position - hitInfo.rigidbody.transform.position).z, (transform.position - hitInfo.rigidbody.transform.position).x);
+				hitInfo.rigidbody.gameObject.GetComponent<VRplayerController>().Hurt( 20, angle);
 			}
 		}
+		print("shooting");
+		StartCoroutine(ShowLaser());
+	}
+
+	IEnumerator ShowLaser () {
+		laserEmitter.GetComponent<LineRenderer>().enabled = true;
+		yield return new WaitForSeconds(0.25f);
+		laserEmitter.GetComponent<LineRenderer>().enabled = false;
 	}
 }

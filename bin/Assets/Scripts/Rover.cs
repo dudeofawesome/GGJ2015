@@ -3,16 +3,17 @@ using System.Collections;
 public class Rover : MonoBehaviour {
 	[SerializeField] private GameObject humanBase;
 
-	int speed = 6,
+	[SerializeField] float speed = 0.01f,
 		health = 100;
 
 	enum States {ACTIVE, INACTIVE};
 	States state = States.INACTIVE;
 
 	public void Update() {
-		if (state == States.ACTIVE) {
-			Vector3 homeVelocityVector = speed * (humanBase.transform.position - transform.position).normalized;
-			transform.position += homeVelocityVector;
+		Vector3 distanceFromBase = humanBase.transform.position - transform.position;
+		if (state == States.ACTIVE && distanceFromBase.magnitude > 5) { //Second condition is for when rover reaches base
+			Vector3 homeVelocityVector = speed * distanceFromBase.normalized;
+			transform.position += homeVelocityVector * Time.deltaTime;
 			transform.LookAt(humanBase.transform);
 		}
 	}
@@ -25,11 +26,11 @@ public class Rover : MonoBehaviour {
 		}
 	}
 
-	public void switchState() {
-		if ( state == States.ACTIVE ) {
-			state = States.INACTIVE;
-		} else {
-			state = States.ACTIVE;
-		}
+	public void turnOn() {
+		state = States.ACTIVE;
+	} 
+
+	public void turnOff() {
+		state = States.INACTIVE;
 	}
 }

@@ -13,6 +13,7 @@ public class VRplayerController : MonoBehaviour {
 	[SerializeField] private GameObject laserEmitter;
 	[SerializeField] private Light gunFlare;
 	[SerializeField] private AudioSource shootSound;
+	[SerializeField] private Menu2 GUI;
 
 	private Vector3 tmpV3 = new Vector3();
 	[SerializeField] public int health = 100;
@@ -70,15 +71,17 @@ public class VRplayerController : MonoBehaviour {
 		RaycastHit hitInfo = new RaycastHit ();
 		if (Physics.Raycast(laserEmitter.transform.position, laserEmitter.transform.forward * 200, out hitInfo, 200f)) {
 			if (hitInfo.transform.gameObject.tag == "enemy") {
-				hitInfo.transform.gameObject.GetComponent<Enemy>().bulletHit(50, 20, true);
+				hitInfo.transform.gameObject.GetComponent<Enemy>().bulletHit(50, 100, true);
 			}
 		}
 	}
 
 	// TODO ADD RED CIRCLE THING
-	public void Hurt (int dmgTaken, double angle) {
-		health -= dmgTaken;
+	public void Hurt (int dmgTaken, float angle) {
+		print("player hit");
 
+		health -= dmgTaken;
+		GUI.StartDirectionHit(0.5f, angle);
 
 		if (health <= 0) {
 			//gameOver();		
