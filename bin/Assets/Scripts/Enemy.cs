@@ -6,11 +6,7 @@ public class Enemy : MonoBehaviour {
 	[SerializeField] private bool smart;
 
 	private static int ENEMY_DISTANCE_RANGE = 50, 
-<<<<<<< HEAD
-					   ENEMY_BUFFER = 5; // How far/close the enemies are allowed to get
-=======
 					   ENEMY_BUFFER = 30; // How far/close the enemies are allowed to get
->>>>>>> mathew_cha
 
 	private int health = 100;
 	private float linearSpeed = 15f, angularVelocity = .001f, 
@@ -24,10 +20,10 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public void Update () {
-		if (smart)
-			move ();
-		else
-			move2 ();
+		if (!GameEngine.marsPaused) {
+			if (smart) move ();
+			else move2 ();
+		}
 	}
 
 
@@ -55,16 +51,10 @@ public class Enemy : MonoBehaviour {
 	// Smart move code, circling the enemy
 	public void move () {
 		Vector3 distanceFromEnemy = player.transform.position - transform.position;
-		print ( distanceFromEnemy.ToString() );
 		// If not in ideal range, beeline, if so, circle
 		if ( distanceFromEnemy.magnitude > idealDistanceFromPlayer && distanceFromEnemy.magnitude > idealDistanceFromPlayer - 0.5f ) {
 			transform.position += linearSpeed * distanceFromEnemy.normalized * Time.deltaTime;
 		} else {
-<<<<<<< HEAD
-			print ("elsed");
-=======
-
->>>>>>> mathew_cha
 			float angle = Mathf.Atan2(player.transform.position.z - transform.position.z, player.transform.position.x - transform.position.x) + Mathf.PI;
 			transform.position = new Vector3(Mathf.Cos(angle + angularVelocity) * distanceFromEnemy.magnitude + player.transform.position.x, transform.position.y, Mathf.Sin(angle + angularVelocity) * distanceFromEnemy.magnitude + player.transform.position.z);
 		}

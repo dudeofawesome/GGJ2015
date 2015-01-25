@@ -11,7 +11,9 @@ public class VRplayerController : MonoBehaviour {
 	[SerializeField] private GameObject laserEmitter;
 
 	private Vector3 tmpV3 = new Vector3();
-	[SerializeField] private int health = 100;
+	[SerializeField] public int health = 100;
+
+	private float MAXSPEED = 3;
 
 
 	// Use this for initialization
@@ -28,7 +30,7 @@ public class VRplayerController : MonoBehaviour {
 		tmpV3.Set (Mathf.Cos (angle - angle2), 0, Mathf.Sin (angle - angle2));
 		tmpV3 *= mag;
 		rigidbody.AddRelativeForce(tmpV3 * 10000, ForceMode.Force);
-		rigidbody.velocity = (rigidbody.velocity.magnitude > 2) ? rigidbody.velocity.normalized * 2 : rigidbody.velocity;
+		rigidbody.velocity = (rigidbody.velocity.magnitude > MAXSPEED) ? rigidbody.velocity.normalized * MAXSPEED : rigidbody.velocity;
 		hands.transform.localRotation = Quaternion.Euler(-Input.GetAxis("AimUpDown") * 15, Input.GetAxis("AimSide") * 15 + 180, 0);
 	}
 
