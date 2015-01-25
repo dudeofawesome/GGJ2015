@@ -11,6 +11,7 @@ public class VRplayerController : MonoBehaviour {
 	[SerializeField] private GameObject laserEmitter;
 
 	private Vector3 tmpV3 = new Vector3();
+	[SerializeField] private int health = 100;
 
 
 	// Use this for initialization
@@ -39,4 +40,15 @@ public class VRplayerController : MonoBehaviour {
 			}
 		}
 	}
+
+	// TODO ADD RED CIRCLE THING
+	public void Hurt (int dmgTaken, double angle) {
+		health -= dmgTaken;
+
+
+		if (health <= 0) {
+			//gameOver();		
+		}
+	}
+
 }
