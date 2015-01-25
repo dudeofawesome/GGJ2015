@@ -27,6 +27,6 @@ public class VRplayerController : MonoBehaviour {
 		tmpV3 *= mag;
 		rigidbody.AddRelativeForce(tmpV3 * 10000, ForceMode.Force);
 		rigidbody.velocity = (rigidbody.velocity.magnitude > 2) ? rigidbody.velocity.normalized * 2 : rigidbody.velocity;
-		hands.transform.localRotation = Quaternion.Euler(-Input.GetAxis("AimSide") * 15, -Input.GetAxis("AimUpDown") * 15 + 180, 0);
+		hands.transform.localRotation = Quaternion.Euler(-Input.GetAxis("AimUpDown") * 15, Input.GetAxis("AimSide") * 15 + 180, 0);
 	}
 }
