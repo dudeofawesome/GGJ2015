@@ -6,17 +6,21 @@ public class Enemy : MonoBehaviour {
 	[SerializeField] private bool smart;
 
 	private static int ENEMY_DISTANCE_RANGE = 50, 
+<<<<<<< HEAD
 					   ENEMY_BUFFER = 5; // How far/close the enemies are allowed to get
+=======
+					   ENEMY_BUFFER = 30; // How far/close the enemies are allowed to get
+>>>>>>> mathew_cha
 
-	private int health = 100, velocity = 5;
-	private float linearSpeed = 10f, angularVelocity = .001f, 
+	private int health = 100;
+	private float linearSpeed = 15f, angularVelocity = .001f, 
 				idealDistanceFromPlayer, startTime;
 
 	public void Start () {
 		startTime = Time.time;
-		idealDistanceFromPlayer = Random.value * ENEMY_DISTANCE_RANGE + ENEMY_BUFFER;
+		idealDistanceFromPlayer = 100;//Random.value * ENEMY_DISTANCE_RANGE + ENEMY_BUFFER;
 		angularVelocity += Random.value * 0.005f;
-		angularVelocity *= ( Mathf.Floor( Random.value * 2 ) * 2 ) - 1; // THIS IS IN RADIANS. The tail code just makes a random -1 or 1.
+		//angularVelocity *= ( Mathf.Floor( Random.value * 2 ) * 2 ) - 1; // THIS IS IN RADIANS. The tail code just makes a random -1 or 1.
 	}
 
 	public void Update () {
@@ -51,14 +55,18 @@ public class Enemy : MonoBehaviour {
 	// Smart move code, circling the enemy
 	public void move () {
 		Vector3 distanceFromEnemy = player.transform.position - transform.position;
-
+		print ( distanceFromEnemy.ToString() );
 		// If not in ideal range, beeline, if so, circle
 		if ( distanceFromEnemy.magnitude > idealDistanceFromPlayer && distanceFromEnemy.magnitude > idealDistanceFromPlayer - 0.5f ) {
 			transform.position += linearSpeed * distanceFromEnemy.normalized * Time.deltaTime;
 		} else {
+<<<<<<< HEAD
 			print ("elsed");
+=======
+
+>>>>>>> mathew_cha
 			float angle = Mathf.Atan2(player.transform.position.z - transform.position.z, player.transform.position.x - transform.position.x) + Mathf.PI;
-			transform.position = new Vector3(Mathf.Cos(angle + angularVelocity) * distanceFromEnemy.magnitude, transform.position.y, Mathf.Sin(angle + angularVelocity) * distanceFromEnemy.magnitude);
+			transform.position = new Vector3(Mathf.Cos(angle + angularVelocity) * distanceFromEnemy.magnitude + player.transform.position.x, transform.position.y, Mathf.Sin(angle + angularVelocity) * distanceFromEnemy.magnitude + player.transform.position.z);
 		}
 		transform.LookAt (player.transform);
 	}
@@ -72,10 +80,12 @@ public class Enemy : MonoBehaviour {
 
 	public void fireBullet () {
 		RaycastHit hitInfo = new RaycastHit ();
-		Vector3 variation = new Vector3 (Random.Range (0.8, 2), Random.Range (0.8, 2), Random.Range (0.8, 2));
-		if (Physics.Raycast(transform, Vector3.Dot(transform.forward, variation), hitInfo, 200)) {
+		Vector3 variation = new Vector3 (Random.Range (0.8f, 2f), Random.Range (0.8f, 2f), Random.Range (0.8f, 2f));
+		if (Physics.Raycast(transform.position, 
+		                    new Vector3(transform.forward.x * variation.x, transform.forward.y * variation.y, transform.forward.z * variation.z),
+		    				out hitInfo, 200f)) {
 			if (hitInfo.rigidbody.gameObject.tag == "player") {
-				double angle = Mathf.Atan2( (Transform - hitInfo.rigidbody.transform).z, (Transform - hitInfo.rigidbody.transform).x);
+				double angle = Mathf.Atan2( (transform.position - hitInfo.rigidbody.transform.position).z, (transform.position - hitInfo.rigidbody.transform.position).x);
 				hitInfo.rigidbody.gameObject.GetComponent<VRplayerController>().Hurt( 20, angle); 
 			}
 		}

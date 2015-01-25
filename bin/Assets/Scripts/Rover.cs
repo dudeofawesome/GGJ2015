@@ -1,9 +1,16 @@
 using UnityEngine;
 using System.Collections;
+<<<<<<< HEAD
 
 public class Rover : MonoBehaviour {
 	[SerializeField] private GameObject humanBase;
 
+=======
+
+public class Rover : MonoBehaviour {
+
+	[SerializeField] private GameObject humanBase;
+>>>>>>> mathew_cha
 	int speed = 6,
 		health = 100;
 
@@ -22,7 +29,11 @@ public class Rover : MonoBehaviour {
 		health -= damage;
 
 		if ( health <= 0 ) {
+<<<<<<< HEAD
 //			gameOver();
+=======
+			//gameOver();
+>>>>>>> mathew_cha
 		}
 
 	}
