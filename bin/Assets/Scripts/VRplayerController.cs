@@ -8,6 +8,7 @@ public class VRplayerController : MonoBehaviour {
 	[SerializeField] private GameObject cardboardMain;
 	[SerializeField] private GameObject cardboardHead;
 	[SerializeField] private GameObject hands;
+	[SerializeField] private GameObject laserEmitter;
 
 	private Vector3 tmpV3 = new Vector3();
 
@@ -28,5 +29,14 @@ public class VRplayerController : MonoBehaviour {
 		rigidbody.AddRelativeForce(tmpV3 * 10000, ForceMode.Force);
 		rigidbody.velocity = (rigidbody.velocity.magnitude > 2) ? rigidbody.velocity.normalized * 2 : rigidbody.velocity;
 		hands.transform.localRotation = Quaternion.Euler(-Input.GetAxis("AimSide") * 15, -Input.GetAxis("AimUpDown") * 15 + 180, 0);
+	}
+
+	void Shoot () {
+		RaycastHit hitInfo = new RaycastHit ();
+		if (Physics.Raycast(laserEmitter.transform, laserEmitter.transform.forward, hitInfo, 200)) {
+			if (hitInfo.rigidbody.gameObject.tag == "enemy") {
+				hitInfo.rigidbody.gameObject.GetComponent<Enemy>().bulletHit(50, 20, true);
+			}
+		}
 	}
 }

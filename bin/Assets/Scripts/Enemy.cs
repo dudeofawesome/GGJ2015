@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour {
 	private static int ENEMY_DISTANCE_RANGE = 100, 
 					   ENEMY_BUFFER = 30; // How far/close the enemies are allowed to get
 
-	private int health, velocity = 5;
+	private int health = 100, velocity = 5;
 	private float linearSpeed = 10f, angularVelocity = .001f, 
 				idealDistanceFromPlayer, startTime;
 
@@ -26,6 +26,7 @@ public class Enemy : MonoBehaviour {
 	public void bulletHit ( int dmgTaken, int pushbackFactor, bool knockBack = false ) {
 		
 		health -= dmgTaken;
+		//AudioSource.PlayClipAtPoint
 
 		if ( health <= 0 ) {
 			die();
@@ -35,9 +36,8 @@ public class Enemy : MonoBehaviour {
 		if (knockBack) {
 			// Push back code
 			Vector3 distanceFromEnemy = transform.position - player.transform.position;
-			transform.position += pushbackFactor * (distanceFromEnemy.normalized - transform.position);
+			rigidbody.AddForce( pushbackFactor * distanceFromEnemy.normalized );
 		}
-
 	}
 
 	private void die () {
