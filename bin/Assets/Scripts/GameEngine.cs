@@ -23,6 +23,9 @@ public class GameEngine : MonoBehaviour {
 	[SerializeField] private float TIMEPERWORLD = 10;
 	private readonly float WORLDCHANGEHINTTIME = 5;
 
+	[SerializeField] private GameObject marsRover;
+	[SerializeField] private SphereCollider marsRoverAlienSpawn;
+
 	// Use this for initialization
 	void Start () {
 		lastSwitched = Time.time;
@@ -47,7 +50,12 @@ public class GameEngine : MonoBehaviour {
 	void Update () {
 		switch (currentLocation) {
 			case World.MARS :
-
+				Collider[] hitColliders = Physics.OverlapSphere(marsRoverAlienSpawn.center, marsRoverAlienSpawn.radius);
+				int i = 0;
+				while (i < hitColliders.Length) {
+					hitColliders[i].SendMessage("AddDamage");
+					i++;
+				}
 				break;
 			case World.EARTH :
 

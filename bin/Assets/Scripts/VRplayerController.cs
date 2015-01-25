@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Holoville.HOTween;
 
 public class VRplayerController : MonoBehaviour {
 
@@ -8,17 +9,23 @@ public class VRplayerController : MonoBehaviour {
 	[SerializeField] private GameObject cardboardMain;
 	[SerializeField] private GameObject cardboardHead;
 	[SerializeField] private GameObject hands;
+	[SerializeField] private GameObject arms;
 	[SerializeField] private GameObject laserEmitter;
+	[SerializeField] private Light gunFlare;
+	[SerializeField] private AudioSource shootSound;
 
 	private Vector3 tmpV3 = new Vector3();
 	[SerializeField] public int health = 100;
 
 	private float MAXSPEED = 3;
 
+	private bool fireLaserTriggerDown = true;
+
 
 	// Use this for initialization
 	void Start () {
-	
+		HOTween.Init(false, false, true);
+		HOTween.EnableOverwriteManager();
 	}
 	
 	// Update is called once per frame
@@ -35,18 +42,35 @@ public class VRplayerController : MonoBehaviour {
 		hands.transform.localRotation = Quaternion.Euler(-Input.GetAxis("AimUpDown") * 15, Input.GetAxis("AimSide") * 15 + 180, 0);
 		// Jump
 		if (Input.GetButtonDown("Jump")) {
-			rigidbody.AddRelativeForce(0, 100000, 0);
+			rigidbody.AddRelativeForce(0, 300000, 0);
 		}
-		if (Input.GetAxis("FireLaser")) {
+		if (Input.GetAxis("Ironsights") > 0) {
+			print("ironing");
+			arms.transform.position.Set(-0.04f, -0.2f, 0f);
+		} else {
+			print("not ironing");
+			arms.transform.position.Set(0, -0.294f, 0f);
+		}
+		if (Input.GetAxis("FireLaser") > 0 && fireLaserTriggerDown) {
+			fireLaserTriggerDown = false;
+			laserEmitter.GetComponent<LineRenderer>().enabled = true;
 			Shoot();
+		} else if (Input.GetAxis("FireLaser") <= 0) {
+			fireLaserTriggerDown = true;
+			laserEmitter.GetComponent<LineRenderer>().enabled = false;
 		}
 	}
 
 	void Shoot () {
+		HOTween.To(gunFlare, 0f, "intensity", 1);
+		gunFlare.enabled = true;
+		gunFlare.intensity = 1;
+		HOTween.To(gunFlare, 0.5f, "intensity", 0);
+		shootSound.Play();
 		RaycastHit hitInfo = new RaycastHit ();
-		if (Physics.Raycast(laserEmitter.transform.position, laserEmitter.transform.forward, out hitInfo, 200f)) {
-			if (hitInfo.rigidbody.gameObject.tag == "enemy") {
-				hitInfo.rigidbody.gameObject.GetComponent<Enemy>().bulletHit(50, 20, true);
+		if (Physics.Raycast(laserEmitter.transform.position, laserEmitter.transform.forward * 200, out hitInfo, 200f)) {
+			if (hitInfo.transform.gameObject.tag == "enemy") {
+				hitInfo.transform.gameObject.GetComponent<Enemy>().bulletHit(50, 20, true);
 			}
 		}
 	}
