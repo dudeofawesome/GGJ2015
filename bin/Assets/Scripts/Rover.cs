@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 public class Rover : MonoBehaviour {
-
 	[SerializeField] private GameObject humanBase;
 
 	int speed = 6,
@@ -22,7 +21,7 @@ public class Rover : MonoBehaviour {
 		health -= damage;
 
 		if ( health <= 0 ) {
-			//gameOver();
+//			gameOver();
 		}
 	}
 

@@ -30,7 +30,11 @@ public class VRplayerController : MonoBehaviour {
 		tmpV3.Set (Mathf.Cos (angle - angle2), 0, Mathf.Sin (angle - angle2));
 		tmpV3 *= mag;
 		rigidbody.AddRelativeForce(tmpV3 * 10000, ForceMode.Force);
+<<<<<<< HEAD
 		rigidbody.velocity = (rigidbody.velocity.magnitude > MAXSPEED) ? rigidbody.velocity.normalized * MAXSPEED : rigidbody.velocity;
+=======
+		rigidbody.velocity = (rigidbody.velocity.magnitude > 2) ? rigidbody.velocity.normalized * 2 : rigidbody.velocity;
+>>>>>>> mathew_cha
 		hands.transform.localRotation = Quaternion.Euler(-Input.GetAxis("AimUpDown") * 15, Input.GetAxis("AimSide") * 15 + 180, 0);
 	}
 

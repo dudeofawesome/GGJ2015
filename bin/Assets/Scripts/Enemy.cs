@@ -5,25 +5,31 @@ public class Enemy : MonoBehaviour {
 	[SerializeField] private GameObject player;
 	[SerializeField] private bool smart;
 
-	private static int ENEMY_DISTANCE_RANGE = 50, 
-					   ENEMY_BUFFER = 30; // How far/close the enemies are allowed to get
-
+	private static int ENEMY_DISTANCE_RANGE = 30,
+					   ENEMY_BUFFER = 10; // How far/close the enemies are allowed to get
 	private int health = 100;
-	private float linearSpeed = 15f, angularVelocity = .001f, 
+	private float linearSpeed = 15f, angularVelocity = .005f, 
 				idealDistanceFromPlayer, startTime;
 
 	public void Start () {
 		startTime = Time.time;
-		idealDistanceFromPlayer = 100;//Random.value * ENEMY_DISTANCE_RANGE + ENEMY_BUFFER;
+		idealDistanceFromPlayer = Random.value * ENEMY_DISTANCE_RANGE + ENEMY_BUFFER;
 		angularVelocity += Random.value * 0.005f;
-		//angularVelocity *= ( Mathf.Floor( Random.value * 2 ) * 2 ) - 1; // THIS IS IN RADIANS. The tail code just makes a random -1 or 1.
+		angularVelocity *= ( Mathf.Floor( Random.value * 2 ) * 2 ) - 1; // THIS IS IN RADIANS. The tail code just makes a random -1 or 1.
 	}
 
 	public void Update () {
+<<<<<<< HEAD
 		if (!GameEngine.marsPaused) {
 			if (smart) move ();
 			else move2 ();
 		}
+=======
+		if (smart)
+			move ();
+		else
+			move2 ();
+>>>>>>> mathew_cha
 	}
 
 
@@ -59,6 +65,7 @@ public class Enemy : MonoBehaviour {
 			transform.position = new Vector3(Mathf.Cos(angle + angularVelocity) * distanceFromEnemy.magnitude + player.transform.position.x, transform.position.y, Mathf.Sin(angle + angularVelocity) * distanceFromEnemy.magnitude + player.transform.position.z);
 		}
 		transform.LookAt (player.transform);
+
 	}
 
 	// Dumb move
