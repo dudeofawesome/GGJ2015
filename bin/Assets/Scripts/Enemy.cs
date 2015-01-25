@@ -3,9 +3,10 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
 	[SerializeField] private GameObject player;
+	[SerializeField] private bool smart;
 
-	private static int ENEMY_DISTANCE_RANGE = 100, 
-					   ENEMY_BUFFER = 30; // How far/close the enemies are allowed to get
+	private static int ENEMY_DISTANCE_RANGE = 50, 
+					   ENEMY_BUFFER = 5; // How far/close the enemies are allowed to get
 
 	private int health, velocity = 5;
 	private float linearSpeed = 10f, angularVelocity = .001f, 
@@ -19,7 +20,10 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public void Update () {
-		move();
+		if (smart)
+			move ();
+		else
+			move2 ();
 	}
 
 
@@ -52,6 +56,7 @@ public class Enemy : MonoBehaviour {
 		if ( distanceFromEnemy.magnitude > idealDistanceFromPlayer && distanceFromEnemy.magnitude > idealDistanceFromPlayer - 0.5f ) {
 			transform.position += linearSpeed * distanceFromEnemy.normalized * Time.deltaTime;
 		} else {
+			print ("elsed");
 			float angle = Mathf.Atan2(player.transform.position.z - transform.position.z, player.transform.position.x - transform.position.x) + Mathf.PI;
 			transform.position = new Vector3(Mathf.Cos(angle + angularVelocity) * distanceFromEnemy.magnitude, transform.position.y, Mathf.Sin(angle + angularVelocity) * distanceFromEnemy.magnitude);
 		}
