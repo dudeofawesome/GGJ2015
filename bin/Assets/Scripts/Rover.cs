@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 
 public class Rover : MonoBehaviour {
-
 	[SerializeField] private GameObject humanBase;
 	int speed = 6,
 		health = 100;
@@ -10,10 +9,11 @@ public class Rover : MonoBehaviour {
 	enum States {ACTIVE, INACTIVE};
 	States state = States.INACTIVE;
 
-	private void move() {
+	public void Update() {
 		if (state == States.ACTIVE) {
 			Vector3 homeVelocityVector = speed * (humanBase.transform.position - transform.position).normalized;
 			transform.position += homeVelocityVector;
+			transform.LookAt(humanBase.transform);
 		}
 	}
 
@@ -21,7 +21,7 @@ public class Rover : MonoBehaviour {
 		health -= damage;
 
 		if ( health <= 0 ) {
-			//gameOver();
+//			gameOver();
 		}
 
 	}
