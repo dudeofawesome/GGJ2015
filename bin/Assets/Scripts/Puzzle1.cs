@@ -1,6 +1,6 @@
 public class numberGuessPuzzle {
 
-	int[][] answer = {1,3,4,5}; // 1-6, 4 long
+	int[] answer = {1,3,4,5}; // 1-6, 4 long
 	int lives = 10;
 
 	public int[] checkAnswer ( int[] playerSubmit ) {
@@ -10,15 +10,15 @@ public class numberGuessPuzzle {
 		bool[] tempHold = new bool[4];
 
 		// Checking for right number and right position
-		for ( int i = 0; i < answer.length; i++ ) {
+		for ( int i = 0; i < answer.Length; i++ ) {
 			if ( playerSubmit[i] == answer[i] ) {
 				results[0]++;
 				tempHold[i] = true;
 			}
 		}
 
-		for ( int i = 0; i < answer.length; i++ ) {
-			for ( int j = 0; j < answer.length; j++ ) {
+		for ( int i = 0; i < answer.Length; i++ ) {
+			for ( int j = 0; j < answer.Length; j++ ) {
 				if ( i != j && !tempHold[j] && playerSubmit[i] == answer[j] ) {
 					results[1]++;
 					tempHold[j] = true;

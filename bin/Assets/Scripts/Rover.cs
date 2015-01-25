@@ -1,12 +1,14 @@
-Using UnityEngine;
-Using System.Collection;
+using UnityEngine;
+using System.Collections;
 
-public class Rover {
+public class Rover : MonoBehaviour {
+
+	[SerializeField] private GameObject humanBase;
 	int speed = 6,
 		health = 100;
 
-	Enum States = {ACTIVE, INACTIVE};
-	States state = State.INACTIVE;
+	enum States {ACTIVE, INACTIVE};
+	States state = States.INACTIVE;
 
 	private void move() {
 		if (state == States.ACTIVE) {
@@ -19,7 +21,7 @@ public class Rover {
 		health -= damage;
 
 		if ( health <= 0 ) {
-			gameOver();
+			//gameOver();
 		}
 
 	}
@@ -28,7 +30,7 @@ public class Rover {
 		if ( state == States.ACTIVE ) {
 			state = States.INACTIVE;
 		} else {
-			state = States.ACTIVE
+			state = States.ACTIVE;
 		}
 	}
 }

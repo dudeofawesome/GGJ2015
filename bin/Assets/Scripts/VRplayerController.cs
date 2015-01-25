@@ -34,7 +34,7 @@ public class VRplayerController : MonoBehaviour {
 
 	void Shoot () {
 		RaycastHit hitInfo = new RaycastHit ();
-		if (Physics.Raycast(laserEmitter.transform, laserEmitter.transform.forward, hitInfo, 200)) {
+		if (Physics.Raycast(laserEmitter.transform.position, laserEmitter.transform.forward, out hitInfo, 200f)) {
 			if (hitInfo.rigidbody.gameObject.tag == "enemy") {
 				hitInfo.rigidbody.gameObject.GetComponent<Enemy>().bulletHit(50, 20, true);
 			}
