@@ -7,6 +7,7 @@ public class VRplayerController : MonoBehaviour {
 	[SerializeField] private GameObject rightEye;
 	[SerializeField] private GameObject cardboardMain;
 	[SerializeField] private GameObject cardboardHead;
+	[SerializeField] private GameObject hands;
 
 	private Vector3 tmpV3 = new Vector3();
 
@@ -25,6 +26,7 @@ public class VRplayerController : MonoBehaviour {
 		tmpV3.Set (Mathf.Cos (angle - angle2), 0, Mathf.Sin (angle - angle2));
 		tmpV3 *= mag;
 		rigidbody.AddRelativeForce(tmpV3 * 10000, ForceMode.Force);
-		rigidbody.velocity = (rigidbody.velocity.magnitude > 10) ? rigidbody.velocity.normalized * 10 : rigidbody.velocity;
+		rigidbody.velocity = (rigidbody.velocity.magnitude > 2) ? rigidbody.velocity.normalized * 2 : rigidbody.velocity;
+		hands.transform.localRotation = Quaternion.Euler(-Input.GetAxis("AimSide") * 15, -Input.GetAxis("AimUpDown") * 15 + 180, 0);
 	}
 }
