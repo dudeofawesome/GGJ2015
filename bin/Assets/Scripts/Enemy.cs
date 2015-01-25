@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour {
 	private static int ENEMY_DISTANCE_RANGE = 50, 
 					   ENEMY_BUFFER = 5; // How far/close the enemies are allowed to get
 
-	private int health, velocity = 5;
+	private int health = 100, velocity = 5;
 	private float linearSpeed = 10f, angularVelocity = .001f, 
 				idealDistanceFromPlayer, startTime;
 
@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour {
 		startTime = Time.time;
 		idealDistanceFromPlayer = Random.value * ENEMY_DISTANCE_RANGE + ENEMY_BUFFER;
 		angularVelocity += Random.value * 0.005f;
-		//angularVelocity *= ( Mathf.Floor( Random.value * 2 ) * 2 ) - 1; // THIS IS IN RADIANS. The tail code just makes a random -1 or 1.
+		angularVelocity *= ( Mathf.Floor( Random.value * 2 ) * 2 ) - 1; // THIS IS IN RADIANS. The tail code just makes a random -1 or 1.
 	}
 
 	public void Update () {
@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour {
 	public void bulletHit ( int dmgTaken, int pushbackFactor, bool knockBack = false ) {
 		
 		health -= dmgTaken;
+		//AudioSource.PlayClipAtPoint
 
 		if ( health <= 0 ) {
 			die();
@@ -39,9 +40,8 @@ public class Enemy : MonoBehaviour {
 		if (knockBack) {
 			// Push back code
 			Vector3 distanceFromEnemy = transform.position - player.transform.position;
-			transform.position += pushbackFactor * (distanceFromEnemy.normalized - transform.position);
+			rigidbody.AddForce( pushbackFactor * distanceFromEnemy.normalized );
 		}
-
 	}
 
 	private void die () {
@@ -71,6 +71,13 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public void fireBullet () {
-
+		RaycastHit hitInfo = new RaycastHit ();
+		Vector3 variation = new Vector3 (Random.Range (0.8, 2), Random.Range (0.8, 2), Random.Range (0.8, 2));
+		if (Physics.Raycast(transform, Vector3.Dot(transform.forward, variation), hitInfo, 200)) {
+			if (hitInfo.rigidbody.gameObject.tag == "player") {
+				double angle = Mathf.Atan2( (Transform - hitInfo.rigidbody.transform).z, (Transform - hitInfo.rigidbody.transform).x);
+				hitInfo.rigidbody.gameObject.GetComponent<VRplayerController>().Hurt( 20, angle); 
+			}
+		}
 	}
 }

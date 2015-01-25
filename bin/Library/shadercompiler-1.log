@@ -124,6 +124,8 @@ Cmd: preprocess
 Cmd: preprocess
   insize=5837 outsize=874 ok=1
 Cmd: preprocess
+  insize=948 outsize=945 ok=1
+Cmd: preprocess
   insize=5633 outsize=759 ok=1
 Cmd: preprocess
   insize=586 outsize=360 ok=1
@@ -131,6 +133,8 @@ Cmd: preprocess
   insize=7257 outsize=925 ok=1
 Cmd: preprocess
   insize=32646 outsize=272 ok=1
+Cmd: preprocess
+  insize=1334 outsize=1331 ok=1
 Cmd: preprocess
   insize=316 outsize=316 ok=1
 Cmd: preprocess
@@ -177,3 +181,7 @@ Cmd: preprocess
   insize=5281 outsize=887 ok=1
 Cmd: preprocess
   insize=1727 outsize=682 ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2847 outsize=560 kw=DIRECTIONAL ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2847 outsize=428 kw=DIRECTIONAL ok=1
