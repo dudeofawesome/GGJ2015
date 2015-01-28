@@ -14,6 +14,7 @@ public class WorldState {
 	public Vector3 spawnPoint;
 	public Vector3 spawnRotation;
 	public Material skybox;
+	public AudioSource music;
 
 	public WorldState () {
 

@@ -15,6 +15,9 @@ public class GameEngine : MonoBehaviour {
 	[SerializeField] private Material skyboxMars;
 	[SerializeField] private Material skyboxISS;
 	[SerializeField] private Material skyboxEarth;
+	[SerializeField] private AudioSource musicMars;
+	[SerializeField] private AudioSource musicISS;
+	[SerializeField] private AudioSource musicEarth;
 	public static bool marsPaused = false;
 	public static bool earthPaused = true;
 	public static bool ISSpaused = true;
@@ -41,11 +44,14 @@ public class GameEngine : MonoBehaviour {
 		worldStates[(int) World.MARS].skybox = skyboxMars;
 		worldStates[(int) World.EARTH].skybox = skyboxEarth;
 		worldStates[(int) World.ISS].skybox = skyboxISS;
+		worldStates[(int) World.MARS].music = musicMars;
+		worldStates[(int) World.EARTH].music = musicEarth;
+		worldStates[(int) World.ISS].music = musicISS;
 		worldStates[(int) World.MARS].spawnPoint = new Vector3(0, 6.34f, 0);
-		worldStates[(int) World.EARTH].spawnPoint = new Vector3(100, 0, 0);
+		worldStates[(int) World.EARTH].spawnPoint = new Vector3(4.347498f, -73.0188f, 3570.857f);
 		worldStates[(int) World.ISS].spawnPoint = new Vector3(10.35f, -35.91f, -3570);
 		worldStates[(int) World.MARS].spawnRotation = new Vector3(0, 0, 0);
-		worldStates[(int) World.EARTH].spawnRotation = new Vector3(0, 0, 0);
+		worldStates[(int) World.EARTH].spawnRotation = new Vector3(0, 243.7267f, 0);
 		worldStates[(int) World.ISS].spawnRotation = new Vector3(0, 90, 0);
 	}
 	
@@ -107,6 +113,9 @@ public class GameEngine : MonoBehaviour {
 			worldStates[(int) currentLocation].playerPosition = player.transform.position;
 			worldStates[(int) currentLocation].playerVeclocity = player.rigidbody.velocity;
 			worldStates[(int) currentLocation].playerRotation = player.transform.rotation;
+			worldStates[0].music.Stop();
+			worldStates[1].music.Stop();
+			worldStates[2].music.Stop();
 			worldStates[(int) currentLocation].playerHealth = player.GetComponent<VRplayerController>().health;
 			switch (currentLocation) {
 				case World.MARS :
@@ -114,18 +123,21 @@ public class GameEngine : MonoBehaviour {
 					marsPaused = true;
 					earthPaused = false;
 					ISSpaused = true;
+					worldStates[(int) currentLocation].music.Play();
 					break;
 				case World.EARTH :
 					currentLocation = World.ISS;
 					marsPaused = true;
 					earthPaused = true;
 					ISSpaused = false;
+					worldStates[(int) currentLocation].music.Play();
 					break;
 				case World.ISS :
 					currentLocation = World.MARS;
 					marsPaused = false;
 					earthPaused = true;
 					ISSpaused = true;
+					worldStates[(int) currentLocation].music.Play();
 					break;
 			}
 			player.transform.position = worldStates[(int) currentLocation].playerPosition;

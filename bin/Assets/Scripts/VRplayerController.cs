@@ -20,8 +20,6 @@ public class VRplayerController : MonoBehaviour {
 
 	private float MAXSPEED = 3;
 
-	private bool fireLaserTriggerDown = true;
-
 
 	// Use this for initialization
 	void Start () {
@@ -45,20 +43,16 @@ public class VRplayerController : MonoBehaviour {
 		if (Input.GetButtonDown("Jump")) {
 			rigidbody.AddRelativeForce(0, 300000, 0);
 		}
-		if (Input.GetAxis("Ironsights") > 0) {
+		if (Input.GetAxis("Ironsights") > 0 || Input.GetMouseButton(1)) {
 			print("ironing");
 			arms.transform.position.Set(-0.04f, -0.2f, 0f);
 		} else {
 			print("not ironing");
 			arms.transform.position.Set(0, -0.294f, 0f);
 		}
-		if (Input.GetAxis("FireLaser") > 0 && fireLaserTriggerDown) {
-			fireLaserTriggerDown = false;
-			laserEmitter.GetComponent<LineRenderer>().enabled = true;
+		if (Input.GetAxis("FireLaser") > 0 || Input.GetMouseButtonDown(0)) {
+			StartCoroutine(ShowLaser());
 			Shoot();
-		} else if (Input.GetAxis("FireLaser") <= 0) {
-			fireLaserTriggerDown = true;
-			laserEmitter.GetComponent<LineRenderer>().enabled = false;
 		}
 	}
 
@@ -86,6 +80,12 @@ public class VRplayerController : MonoBehaviour {
 		if (health <= 0) {
 			//gameOver();		
 		}
+	}
+
+	IEnumerator ShowLaser () {
+		laserEmitter.GetComponent<LineRenderer>().enabled = true;
+		yield return new WaitForSeconds(0.25f);
+		laserEmitter.GetComponent<LineRenderer>().enabled = false;
 	}
 
 }
